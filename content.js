@@ -1,5 +1,6 @@
 const serverURL = 'http://glacial-cove-76906.herokuapp.com';
 
+
 function getVotes(shoutId,cb){
 	$.get(serverURL+'/get-votes?shout_id='+shoutId,function(res,status){
 		return cb(res,status);
