@@ -20,10 +20,12 @@ function renderButtons(){
 				</a>
 			</li>`);
 			$(self).append(button);
-			button.on('click', function(event,asd){
+			button.on('click', function(event){
+				event.preventDefault();
 				var likes = parseInt(button.find('span.like_count').text());
 				button.find('span.like_count').text(likes+1);
 				vote(shoutId);
+				button.off('click');
 			});
 		});
 	})	
