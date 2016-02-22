@@ -1,6 +1,6 @@
 const serverURL = 'http://glacial-cove-76906.herokuapp.com';
 
-function getVotes(shoutId,cb){
+function getVotes(shoutId,cb){console.log(shoutId);
 	$.get(serverURL+'/get-votes?shout_id='+shoutId,function(res,status){
 		return cb(res,status);
 	});
@@ -9,7 +9,7 @@ function getVotes(shoutId,cb){
 function renderButtons(){
 	$('.list-main-actions').each(function(){
 		var self = this;
-		var shoutId = $('.shout-action-like').attr('data-id').trim();
+		var shoutId = $(this).find('.shout-action-like').attr('data-id').trim();
 		getVotes(shoutId,function(res,status){
 			var button = $(
 			`<li>
@@ -20,7 +20,7 @@ function renderButtons(){
 				</a>
 			</li>`);
 			$(self).append(button);
-			button.on('click', function(event){
+			button.on('click', function(event){console.log('votando: ',shoutId);
 				event.preventDefault();
 				var likes = parseInt(button.find('span.like_count').text());
 				button.find('span.like_count').text(likes+1);
@@ -56,3 +56,8 @@ $(document).ready(function(){
 });
 
 
+$(document).ajaxSuccess(function(event, jqXHR, settings) { console.log("ajax?");
+    if (settings.url.indexOf('ajax/feed/fetch') > -1 || settings.url.indexOf('serv/more/trend') > -1) {
+        renderButtons();
+    }
+});
