@@ -4,7 +4,7 @@
   "name": "Taringa! shouts dislike",
   "short_name": "T! shouts",
   "description": "Vota negativamente los shouts que no te gustan!",
-  "version": "1.0.3",
+  "version": "1.1.0",
   
   "content_scripts": [
       {
