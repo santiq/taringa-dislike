@@ -20,7 +20,7 @@ function renderButtons(){
 		getVotes(shoutId,function(res,status){
 			var button = $(
 			`<li>
-				<a href="#" class="icon-pulgarabajo no-me-gusta" title="Votá negativo a este shout">
+				<a href="#" class="icon-pulgarabajo no-me-gusta" title="VotÃ¡ negativo a este shout">
 					<span class="like_count">
 					${res?res.count:'0'}
 					</span>
