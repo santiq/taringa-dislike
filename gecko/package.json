@@ -1,0 +1,15 @@
+{
+  "title": "Taringa! shouts dislike",
+  "name": "Taringa_shouts_dislike",
+  "version": "1.0.3",
+  "description": "Vota negativamente los shouts que no te gustan!",
+  "main": "index.js",
+  "author": "santiq",
+  "engines": {
+    "firefox": ">=38.0a1"
+  },
+  "permissions": {
+    "cross-domain-content": ["http://glacial-cove-76906.herokuapp.com"]
+}
+}
+
