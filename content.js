@@ -42,6 +42,34 @@ function renderButtons(){
 		});
 	});
 
+	$('.shout-footer').each(function(){
+		var actions = $(this).find('.s-action-list');
+		var shoutId = actions? actions.attr('data-id') .trim() : '' ;
+		var self = this;
+		$(this).find('a.button-action-s.action-activity.hastipsy').on('click',function(e){
+			if($(this).hasClass('.activity-already-loaded'))
+				return;
+			$(this).addClass('.activity-already-loaded');
+			var list = $(self).parent().parent().find('.list.small-list.activity-log.hide');
+			getVotes(shoutId,function(res,status){console.log("llamado!");
+				if(res){
+					res.voters.forEach(user=>{
+						console.log(user.date);
+						var element=$(
+						`<div class="list-element NO-ME-GUSTA overflow"> 
+						 <i class="icon icon-pulgarabajo" style="margin-right:10px;opacity:.6!important;"></i>
+						  <img src=${user.avatarUrl} class="avatar-16 floatL" style="margin-right:8px"> 
+						   a @<a class="hovercard" href=/${user.nick}>${user.nick}</a> no le gustó
+						</div>`
+						)
+						list.prepend(element);
+					})
+				}
+			});
+
+		})
+	})
+
 	$('.list-main-actions').each(function(){
 		var self = this;
 		var shoutId = $(this).find('.shout-action-like').attr('data-id').trim();
