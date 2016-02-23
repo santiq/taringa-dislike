@@ -8,6 +8,31 @@ function getVotes(shoutId,cb){
 }
 
 function renderButtons(){
+
+	$('.shout-footer > .s-action-list').each(function(){
+		var self = this;
+		var shoutId = $(this).attr('data-id') ? $(this).attr('data-id') .trim() : '' ;
+		getVotes(shoutId,function(res,status){
+			var button = $(
+			`<div class="button-action-s pointer" original-title="No me gusta">
+					<i class="icon thumb-down"></i>
+					<div class="action-number">
+						<span class="like_count">
+							${res?res.count:'0'}
+						</span>
+					</div>
+				</div>`);
+			$(self).find('.action-vote').after(button);
+			button.on('click', function(event){
+				event.preventDefault();
+				var likes = parseInt(button.find('span.like_count').text());
+				button.find('span.like_count').text(likes+1);
+				vote(shoutId);
+				button.off('click');
+			});
+		});
+	});
+
 	$('.list-main-actions').each(function(){
 		var self = this;
 		var shoutId = $(this).find('.shout-action-like').attr('data-id').trim();
