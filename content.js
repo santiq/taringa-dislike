@@ -12,17 +12,25 @@ function renderButtons(){
 	$('.shout-footer > .s-action-list').each(function(){
 		var self = this;
 		var shoutId = $(this).attr('data-id') ? $(this).attr('data-id') .trim() : '' ;
+		var $container = $($(self).closest('.activity-element'));
+		//Fabi
+		if($container.hasClass('negative-added'))
+			return true; //continue
+
 		getVotes(shoutId,function(res,status){
 			var button = $(
-			`<div class="button-action-s pointer" original-title="No me gusta">
-					<i class="icon thumb-down"></i>
-					<div class="action-number">
+			`<div class="button-action-s pointer no-me-gusta" title="No me gusta">
+					<div class="action-number" style="float:right;"> 
 						<span class="like_count">
-							${res?res.count:'0'}
-						</span>
+		 					${res?res.count:'0'}
+		 				</span>
 					</div>
+					<i class="icon-pulgarabajo" style="opacity:.6!important;"></i>
 				</div>`);
-			$(self).find('.action-vote').after(button);
+
+			$(self).find('div.require-login.button-action-s.action-vote.hastipsy.pointer').before(button);
+			//Mark as added - Fabi
+			$container.addClass('negative-added');
 			button.on('click', function(event){
 				event.preventDefault();
 				var likes = parseInt(button.find('span.like_count').text());
@@ -32,6 +40,35 @@ function renderButtons(){
 			});
 		});
 	});
+
+	$('.list-main-actions').each(function(){
+		var self = this;
+		var shoutId = $(this).find('.shout-action-like').attr('data-id').trim();
+		var $container = $($(self).closest('.shout-item'));
+		//Fabi
+		if($container.hasClass('negative-added'))
+			return true; //continue
+		getVotes(shoutId,function(res,status){
+			var button = $(
+			`<li>
+				<a href="#" class="icon-pulgarabajo no-me-gusta" title="Votá negativo a este shout">
+					<span class="like_count">
+					${res?res.count:'0'}
+					</span>
+				</a>
+			</li>`);
+			//Mark as added - Fabi
+			$container.addClass('negative-added');
+			$(self).append(button);
+			button.on('click', function(event){
+				event.preventDefault();
+				var likes = parseInt(button.find('span.like_count').text());
+				button.find('span.like_count').text(likes+1);
+				vote(shoutId);
+				button.off('click');
+			});
+		});
+	})	
 
 	$('article.shoutsb').each(function(){
 		var self = this;
@@ -54,29 +91,6 @@ function renderButtons(){
 		});
 	});
 
-
-	$('.list-main-actions').each(function(){
-		var self = this;
-		var shoutId = $(this).find('.shout-action-like').attr('data-id').trim();
-		getVotes(shoutId,function(res,status){
-			var button = $(
-			`<li>
-				<a href="#" class="icon-pulgarabajo no-me-gusta" title="Votá negativo a este shout">
-					<span class="like_count">
-					${res?res.count:'0'}
-					</span>
-				</a>
-			</li>`);
-			$(self).append(button);
-			button.on('click', function(event){
-				event.preventDefault();
-				var likes = parseInt(button.find('span.like_count').text());
-				button.find('span.like_count').text(likes+1);
-				vote(shoutId);
-				button.off('click');
-			});
-		});
-	})	
 }
 
 function vote(shoutId){
@@ -100,11 +114,21 @@ function vote(shoutId){
 }
 
 $(document).ready(function(){
+	//Stylesheet
+	var Stylesheet =".button-action-s.no-me-gusta .action-number{float:right;} .button-action-s.no-me-gusta .icon-pulgarabajo{float:left;margin:2px 11px;margin-right:2px;} ";
+	$('head').append('<style>'+Stylesheet+'</style>');
 	renderButtons();
 });
 
-$(document).ajaxSuccess(function(event, jqXHR, settings) {
-    if (settings && settings.url.indexOf('ajax/feed/fetch') > -1 || settings.url.indexOf('serv/more/trend') > -1) {
-        renderButtons();
-    }
-});
+//Fabi
+if(window.location.pathname ==='/mi'){
+	// /mi
+	$('#Feed-list').onResize().on('resize',function(event){
+		renderButtons();
+	});
+}else{
+	//shouts
+	$('.shouts-list').onResize().on('resize',function(event){
+		renderButtons();
+	});
+}
