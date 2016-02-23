@@ -17,20 +17,21 @@ function renderButtons(){
 		if($container.hasClass('negative-added'))
 			return true; //continue
 
-		getVotes(shoutId,function(res,status){
-			var button = $(
+		var button = $(
 			`<div class="button-action-s pointer no-me-gusta" title="No me gusta">
 					<div class="action-number" style="float:right;"> 
 						<span class="like_count">
-		 					${res?res.count:'0'}
 		 				</span>
 					</div>
 					<i class="icon-pulgarabajo" style="opacity:.6!important;"></i>
 				</div>`);
 
-			$(self).find('div.require-login.button-action-s.action-vote.hastipsy.pointer').before(button);
-			//Mark as added - Fabi
-			$container.addClass('negative-added');
+		$(self).find('div.require-login.button-action-s.action-vote.hastipsy.pointer').before(button);
+		//Mark as added - Fabi
+		$container.addClass('negative-added');
+
+		getVotes(shoutId,function(res,status){
+			button.find('span.like_count').text(res?res.count:'0');
 			button.on('click', function(event){
 				event.preventDefault();
 				var likes = parseInt(button.find('span.like_count').text());
@@ -48,18 +49,20 @@ function renderButtons(){
 		//Fabi
 		if($container.hasClass('negative-added'))
 			return true; //continue
-		getVotes(shoutId,function(res,status){
-			var button = $(
+
+		var button = $(
 			`<li>
 				<a href="#" class="icon-pulgarabajo no-me-gusta" title="Votá negativo a este shout">
 					<span class="like_count">
-					${res?res.count:'0'}
 					</span>
 				</a>
 			</li>`);
-			//Mark as added - Fabi
-			$container.addClass('negative-added');
-			$(self).append(button);
+		//Mark as added - Fabi
+		$container.addClass('negative-added');
+		$(self).append(button);
+
+		getVotes(shoutId,function(res,status){
+			button.find('span.like_count').text(res?res.count:'0');	
 			button.on('click', function(event){
 				event.preventDefault();
 				var likes = parseInt(button.find('span.like_count').text());
