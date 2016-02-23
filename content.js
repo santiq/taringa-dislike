@@ -38,7 +38,7 @@ function renderButtons(){
 		var shoutId = $(this).attr('data-id') ? $(this).attr('data-id') .trim() : '' ;
 		getVotes(shoutId,function(res,status){
 			var button = $(
-			`<a class=" like shoutsb__like icon-pulgarabajo">
+			`<a class="shoutsb__like icon-pulgarabajo">
 				<span class="like_count">
 					${res?res.count:'0'}
 				</span>
